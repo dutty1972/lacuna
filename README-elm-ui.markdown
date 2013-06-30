@@ -2,7 +2,7 @@
 ## Why not run a hello world?
 You will have to have gcc and elementary installed.
 
-	lpp elm-ui hello.c -o hello `(pkg-config --cflags --libs elementary)`
+	./lpp elm-ui hello.c -o hello `(pkg-config --cflags --libs elementary)`
 	./hello
 
 or, just simply
@@ -12,8 +12,8 @@ or, just simply
 
 ## processing flow
 
-	cpp -dD file.c | sed '/__STDC/d' | lpp-elm-ui | cpp | gcc -x cpp-output -
-	      `-- #include, #define  `-- avoid warning   `-- expand macros
+	cpp -dD file.c | sed '/__STDC/d' | ./lpp-elm-ui | cpp | gcc -x cpp-output -
+	 `-- #include, #define  `-- avoid warning           `-- expand macros
 
 ## how to use?
 
