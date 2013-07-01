@@ -27,73 +27,70 @@ or, just simply
 ## configuration file
 example:
 
-	evas object
-		weight
-			size_hint_weight_set
-			size_hint_weight_get
-			EXPAND	EVAS_HINT_EXPAND
+	evas_object		/						/
+		weight		size_hint_weight_set	size_hint_weight_get
+		resize		resize					/
+		/ / /
+		EXPAND		EVAS_HINT_EXPAND
+		FILL		EVAS_HINT_FILL
+		/ /
 
-		align
-			size_hint_align_set
-			size_hint_align_get
-			FILL	EVAS_HINT_FILL
+	elm_object		evas_object				/
+		/ / /
+		/ /
+
+	elm_win			elm_object				util_standard_add
+		resize_object	resize_object_add	/
+		/ / /
+		/ /
+
+	elm_box			elm_object				/
+		pack		pack_end				/
+		pack_end	pack_end				/
+		/ / /
+		/ /
 
 
-	elm table
-		pack
-			pack
-			/
+Syntax:
 
+	"/"		denotes to "null".
+	"/ / /"	denotes to "end of method list"
+	"/ /"	denotes to "end of substitution list"
 
-	elm box
-		pack
-			pack_end
-			/
+	blank lines are ignored.
 
-		pack_end
-			pack_end
-			/
-		
-		
-
-In the configuration file, blank lines is very important.
-They tell the parser when a section ends.
-
-	prefix object_type
-		method
-			set_func
-			get_func
-			what_to_replace <BLANKS> replacement
-			what_to_replace <BLANKS> replacement
-			what_to_replace <BLANKS> replacement
-			what_to_replace <BLANKS> replacement
-			...
-		<BLANK_LINE>
-		method
-			set_func
-			get_func
-			what_to_replace <BLANKS> replacement
-		<BLANK_LINE>
-		method
-			set_func
-			get_func
-			what_to_replace <BLANKS> replacement
-		<BLANK_LINE>
-		method
-			set_func
-			get_func
-			what_to_replace <BLANKS> replacement
-		<BLANK_LINE>
+	<prefix>_<type> <BLANKS> <parent> <BLANKS> <add_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
 		...
-	<BLANK_LINE>
-	prefix object_type
-		method
-			set_func
-			get_func
-			what_to_replace <BLANKS> replacement
-		<BLANK_LINE>
-	<BLANK_LINE>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		/ / /
+		<subs_from> <BLANKS> <subs_to>
+		<subs_from> <BLANKS> <subs_to>
+		<subs_from> <BLANKS> <subs_to>
+		<subs_from> <BLANKS> <subs_to>
+		...
+		<subs_from> <BLANKS> <subs_to>
+		/ /
+	<prefix>_<type> <BLANKS> <parent> <BLANKS> <add_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		...
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		/ / /
+		<subs_from> <BLANKS> <subs_to>
+		...
+		<subs_from> <BLANKS> <subs_to>
+		/ /
 	...
-
-
+	<prefix>_<type> <BLANKS> <parent> <BLANKS> <add_method>
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		...
+		<method> <BLANKS> <set_method> <BLANKS> <get_method>
+		/ / /
+		<subs_from> <BLANKS> <subs_to>
+		...
+		<subs_from> <BLANKS> <subs_to>
+		/ /
 
