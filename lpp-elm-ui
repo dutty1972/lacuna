@@ -13,9 +13,9 @@ $ID = '[^\W0-9][^\W.]*';
 
 
 
-# init database
-my $funcs = &read_db('lpp-elm-ui.func.db');
-#my $consts = &read_db('lpp-elm-ui.const.db');
+# init databases
+my $funcs  = &read_db('lpp-elm-ui.func.db' );
+my $consts = &read_db('lpp-elm-ui.const.db');
 
 
 
@@ -43,7 +43,7 @@ while (<>) {
 	/
 		my $name = $1;
 		my $type = $2;
-		my $para = $3 || '()';
+		my $para = $3 ? &subspara($type, $3) : '()';
 		&cast_object_type($name, $type);
 		"LPP_ELM_UI_SET($name, elm_${type}_add$para)";
 	/xeg;
@@ -113,7 +113,7 @@ while (<>) {
 					or die "[get] undeclared object: $name.";
 		my $func = &realfunc('g', $type, $2)
 					or die "[get] no such function ${name}::$2.";
-		my $para = $3 ? ', ' . &remove_parentheses($3) : '';
+		my $para = $3 ? ', ' . &subspara($type, &remove_parentheses($3)) : '';
 		"$func($name$para)";
 	/xeg;
 
@@ -134,7 +134,7 @@ while (<>) {
 					or die "[set] undeclared object: $name.";
 		my $func = &realfunc('s', $type, $2)
 					or die "[set] no such function ${name}:$2.";
-		my $para = $3 ? ', ' . &remove_parentheses($3) : '';
+		my $para = $3 ? ', ' . &subspara($type, &remove_parentheses($3)) : '';
 		"$func($name$para)";
 	/xeg;
 
@@ -147,11 +147,11 @@ while (<>) {
 # helper functions
 sub read_db
 {
-	my %db;
+	my @db;
 	open my $DB, '<', shift or die "failed to open file.";
-	while (<$DB>) { chomp; $db{$_} = 1 }
+	while (<$DB>) { chomp; unshift @db, $_ }
 	close $DB;
-	\%db;
+	\@db;
 }
 
 sub remove_parentheses
@@ -168,27 +168,39 @@ sub realfunc
 	#	gos = Get Or Set
 	#	rf  = Real Func
 	my ($gos, $type, $func) = @_;
-	my $rf;
-
-	&search_db($funcs, $rf="elm_${type}_${func}_${gos}et") and return $rf;
-	&search_db($funcs, $rf="elm_${type}_${func}"         ) and return $rf;
-	&search_db($funcs, $rf="elm_object_${func}_${gos}et" ) and return $rf;
-	&search_db($funcs, $rf="elm_object_${func}"          ) and return $rf;
-	#&search_db($funcs, $rf="elm_any_${func}_${gos}et"    ) and return $rf;
-	#&search_db($funcs, $rf="elm_any_${func}"             ) and return $rf;
-	&search_db($funcs, $rf="evas_${type}_${func}_${gos}et") and return $rf;
-	&search_db($funcs, $rf="evas_${type}_${func}"         ) and return $rf;
-	&search_db($funcs, $rf="evas_object_${func}_${gos}et" ) and return $rf;
-	&search_db($funcs, $rf="evas_object_${func}"          ) and return $rf;
-	#&search_db($funcs, $rf="evas_any_${func}_${gos}et"    ) and return $rf;
-	#&search_db($funcs, $rf="evas_any_${func}"             ) and return $rf;
+	for (@$funcs) {
+		/^(elm|evas)_(${type}|object)_${func}(_${gos}et|_add)?$/
+				and return $_;
+	}
+	for (@$funcs) {
+		/^(elm|evas)_(${type}|object)_[a-z0-9_]+_${func}(_${gos}et|_add)?$/
+				and return $_;
+	}
 	undef;
 }
 
-sub search_db
+sub subspara
 {
-	my ($db, $what) = @_;
-	$db->{$what};
+	our ($type, $para) = @_;
+	$type = uc $type;
+
+	$para =~ s/::([A-Z0-9_]+)/
+		&subs($1);
+	/xeg;
+
+	sub subs
+	{
+		my ($name) = @_;
+		for (@$consts) {
+			/^(ELM|EVAS)_(${type}|OBJECT)_$name$/ and return $_;
+		}
+		for (@$consts) {
+			/^(ELM|EVAS)_([A-Z0-9]+_)*$name$/ and return $_;
+		}
+		$name;
+	}
+
+	$para;
 }
 
 
