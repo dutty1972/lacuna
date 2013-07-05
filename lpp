@@ -37,5 +37,5 @@ $ppflags .= $srcs;
 
 # do the job!
 print "cpp $ppflags | sed '/__STDC/d' | $pps | cpp | gcc $ccflags\n";
-`cpp $ppflags | sed '/__STDC/d' | $pps | cpp | gcc $ccflags`
+system "cpp $ppflags | sed '/__STDC/d' | $pps | cpp | gcc $ccflags";
 
