@@ -24,12 +24,18 @@ for (@ds) {
 	}
 }
 
-
 open F, '> lpp-elm-ui.func.db' or die $!;
-print F join("\n", @funcs);
+print F join("\n", &uniq(@funcs));
 close F;
 
 open F, '> lpp-elm-ui.const.db' or die $!;
-print F join("\n", @consts);
+print F join("\n", &uniq(@consts));
 close F;
+
+
+sub uniq
+{
+	my %seen;
+	grep { !$seen{$_}++ } @_;
+}
 
