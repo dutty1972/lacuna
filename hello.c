@@ -19,19 +19,19 @@ label :* text;		// global variable
 
 EAPI_MAIN int elm_main(int argc, char * argv[])
 {
-	win:+win			(NULL, "test-elm", ELM_WIN_BASIC);
+	win:+win			(NULL, "test-elm", ::BASIC);
 	win: title			("Test Elementary");
 	win: resize			(200, 100);
 	win:-delete,request	((void *)elm_exit, NULL);
 
 	bg :+bg				(win);
-	bg : size_hint_weight(EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	win: resize_object_add(bg);
+	bg : weight			(::HINT_EXPAND, ::HINT_EXPAND);
+	win: resize_object	(bg);
 	bg : show;
 
 	vbox:+box			(win);
-	vbox: size_hint_weight(EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	win : resize_object_add(vbox);
+	vbox: weight		(::HINT_EXPAND, ::HINT_EXPAND);
+	win : resize_object	(vbox);
 	vbox: show;
 
 	{
@@ -40,14 +40,14 @@ EAPI_MAIN int elm_main(int argc, char * argv[])
 	}
 	text: text		("Hello, World!");
 	text: scale		(2.0);
-	text: size_hint_weight(0, EVAS_HINT_EXPAND);
-	text: size_hint_align(0.5, EVAS_HINT_FILL);
+	text: weight	(0, ::HINT_EXPAND);
+	text: align		(0.5, ::HINT_FILL);
 	vbox: pack_end	(text);
 	text: show;
 
 	btn :+button	(win);
 	btn : text		("Click Me!");
-	btn : size_hint_weight(0, 0.5);
+	btn : weight	(0, 0.5);
 	vbox: pack_end	(btn);
 	btn : show;
 
