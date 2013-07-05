@@ -17,14 +17,6 @@ or, just simply
 
 ## How to use?
 
-### Object Type
-
-Object type can be either `lib.object` or `object`, that is, the prefix
-`lib.` can be omitted. When confused, it will become `elm.`.
-
-<hr>
-
-
 > ### add object
 > ```asm
 var :+ object (parameters)
