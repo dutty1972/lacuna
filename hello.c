@@ -1,6 +1,7 @@
 #if 0
 ./lpp elm-ui $0 -o hello `(pkg-config --cflags --libs elementary)` &&
 		./hello
+rm -f hello
 exit 0
 #endif
 
@@ -18,37 +19,46 @@ label :* text;		// global variable
 
 EAPI_MAIN int elm_main(int argc, char * argv[])
 {
-	win:+win			("test-elm", "test-elm");
+	win:+win			(NULL, "test-elm", ELM_WIN_BASIC);
+	win: title			("Test Elementary");
 	win: resize			(200, 100);
 	win:-delete,request	((void *)elm_exit, NULL);
 
+	bg :+bg				(win);
+	bg : size_hint_weight(EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	win: resize_object_add(bg);
+	bg : show;
+
 	vbox:+box			(win);
-	vbox: weight		(EXPAND, EXPAND);
-	win : resize_object	(vbox);
+	vbox: size_hint_weight(EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	win : resize_object_add(vbox);
 	vbox: show;
 
-	text:+label		(win);
+	{
+		__:+label		(win);
+		text = __;
+	}
+	text: text		("Hello, World!");
 	text: scale		(2.0);
-	text: weight	(0, EXPAND);
-	text: align		(0.5, FILL);
-	vbox: pack		(text);
+	text: size_hint_weight(0, EVAS_HINT_EXPAND);
+	text: size_hint_align(0.5, EVAS_HINT_FILL);
+	vbox: pack_end	(text);
 	text: show;
-	elm_object_text_set(text, "Hello, World!");	// unable to do this
 
 	btn :+button	(win);
-	btn : weight	(0, 0.5);
-	vbox: pack		(btn);
+	btn : text		("Click Me!");
+	btn : size_hint_weight(0, 0.5);
+	vbox: pack_end	(btn);
 	btn : show;
-	elm_object_text_set(btn, "Click Me!");	// unable to do this
 
 	void on_btn_clicked(const char * str, button :* btn)
 	{
-		elm_object_text_set(text, str);	// unable to do this
-		btn: hide;
+		text: text	(str);
+		btn : hide;
 	}
 	btn :-clicked	((void *)on_btn_clicked, "Yes! Yes! Yes!!!");
 
-	win:show;
+	win: show;
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // only above is parsed by elm-ui
