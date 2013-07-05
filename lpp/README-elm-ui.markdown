@@ -18,7 +18,7 @@ or, just simply
 ## How to use?
 
 ### parameters
-In the parameters, you can use "::NAME" to refer to a const abbreviation.
+In the parameters, you can use `::NAME` to refer to a const abbreviation.
 
 <hr>
 
