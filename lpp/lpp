@@ -30,6 +30,11 @@ for (@ARGV) {
 		next;
 	};
 
+	/^-c$/ and do {
+		$ccflags .= "$_ ";
+		next;
+	};
+
 	$ppflags .= "$_ ";
 	$ccflags .= "$_ ";
 }
