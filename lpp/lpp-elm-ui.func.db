@@ -473,7 +473,7 @@ evas_object_stack_above
 evas_object_lower
 evas_object_raise
 evas_object_type_get
-evas_get
+evas_object_evas_get
 evas_object_color_get
 evas_object_color_set
 evas_object_visible_get
